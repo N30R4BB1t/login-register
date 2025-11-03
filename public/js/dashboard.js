@@ -28,9 +28,9 @@ function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
         window.location.href = '/login.html';
-        return false;
+        return null;  // Retorna null (compatível com string)
     }
-    return token;
+    return token;     // Retorna string
 }
 
 function displayUserName() {
@@ -346,4 +346,5 @@ function openModal(mode, user = null) {
 
 function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
+
 }
