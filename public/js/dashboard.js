@@ -352,7 +352,7 @@ function openModal(mode, user = null) {
     if (mode === 'create') {
         document.getElementById('modal-title').textContent = 'Novo Usuário';
         document.getElementById('submit-btn').textContent = 'Criar Usuário';
-        passwordGroup.style.display = 'block';
+        passwordField.style.display = 'block';
         document.getElementById('user-password-input').required = true;
     } else {
         document.getElementById('modal-title').textContent = 'Editar Usuário';
@@ -360,7 +360,7 @@ function openModal(mode, user = null) {
         document.getElementById('user-id').value = user.id;
         document.getElementById('user-name-input').value = user.name;
         document.getElementById('user-email-input').value = user.email;
-        passwordGroup.style.display = 'none';
+        passwordField.style.display = 'none';
         document.getElementById('user-password-input').required = false;
     }
 
@@ -371,6 +371,7 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
 
 
 
