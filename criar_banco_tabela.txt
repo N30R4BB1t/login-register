@@ -1,0 +1,14 @@
+Use o comando abaixo no postgreSQl para criar seu banco de dados e a tabela para
+a utilização no código.
+
+CREATE DATABASE meu_banco;
+
+USE meu_banco;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

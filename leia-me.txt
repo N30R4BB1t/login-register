@@ -1,0 +1,27 @@
+🚀 Solução Rápida para VOCÊ Agora
+Se quiser remover completamente o aviso:
+
+1. Baixe o mkcert:
+https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-windows-amd64.exe
+
+2. Execute no CMD como Administrador:
+
+2.1. Copie o executável para a pasta raiz:
+cd C:\Users\Vladimir\Desktop\estudo_nodejs
+
+2.2. Execute o comando abaixo no cmd:
+mkcert-v1.4.4-windows-amd64.exe -install
+
+2.3 Copie o executável para a pasta ssl, acesse a pasta e execute o comando abaixo:
+mkcert-v1.4.4-windows-amd64.exe localhost 127.0.0.1
+
+3. Renomeie os arquivos gerados:
+ren localhost+1.pem cert.pem
+ren localhost+1-key.pem key.pem
+
+4. Reinicie o servidor:
+npm run dev
+
+5. Acesse:
+https://localhost:443
+✅ Cadeado verde, sem avisos!
