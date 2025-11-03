@@ -1,22 +1,26 @@
-const API_URL = 'https://localhost:443/api'; //para https
+const API_URL = 'https://localhost/api'; // ✅ Porta 443 implícita
 const loginUrl = '/login.html';
 let currentMode = 'create';
+
+// ========================================
+// CONSTANTES
+// ========================================
+
+const DISPLAY_STYLES = {
+    BLOCK: 'block',
+    NONE: 'none',
+    FLEX: 'flex',
+    TABLE: 'table'  // ✅ ADICIONADO
+};
 
 // ========================================
 // INICIALIZAÇÃO
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificar autenticação
     checkAuth();
-    
-    // Mostrar nome do usuário
     displayUserName();
-    
-    // Carregar usuários
     loadUsers();
-    
-    // Configurar event listeners
     setupEventListeners();
 });
 
@@ -28,9 +32,9 @@ function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
         globalThis.location.href = loginUrl;
-        return null;  // Retorna null (compatível com string)
+        return null;
     }
-    return token;     // Retorna string
+    return token;
 }
 
 function displayUserName() {
@@ -51,28 +55,17 @@ function logout() {
 // ========================================
 
 function setupEventListeners() {
-    // Botão Logout
     document.getElementById('btn-logout').addEventListener('click', logout);
-    
-    // Botão Novo Usuário
     document.getElementById('btn-new-user').addEventListener('click', () => {
         openModal('create');
     });
-    
-    // Botão Fechar Modal (X)
     document.getElementById('btn-close-modal').addEventListener('click', closeModal);
-    
-    // Fechar modal clicando no fundo
     document.getElementById('user-modal').addEventListener('click', (e) => {
         if (e.target.id === 'user-modal') {
             closeModal();
         }
     });
-    
-    // Submit do formulário do modal
     document.getElementById('user-form').addEventListener('submit', handleSubmit);
-    
-    // Event delegation para botões da tabela (Editar/Deletar)
     document.getElementById('users-list').addEventListener('click', handleTableClick);
 }
 
@@ -83,14 +76,12 @@ function setupEventListeners() {
 function handleTableClick(e) {
     const target = e.target;
     
-    // Botão Editar
     if (target.classList.contains('btn-warning')) {
         const row = target.closest('tr');
         const id = Number.parseInt(row.cells[0].textContent);
         editUser(id);
     }
     
-    // Botão Deletar
     if (target.classList.contains('btn-danger')) {
         const row = target.closest('tr');
         const id = Number.parseInt(row.cells[0].textContent);
@@ -121,15 +112,15 @@ function showMessage(text, type) {
     const message = document.getElementById('message');
     message.textContent = text;
     message.className = `message ${type}`;
-    message.style.display = 'block';
+    message.style.display = DISPLAY_STYLES.BLOCK; // ✅ CORRIGIDO
     
     setTimeout(() => {
-        message.style.display = 'none';
+        message.style.display = DISPLAY_STYLES.NONE; // ✅ CORRIGIDO
     }, 5000);
 }
 
 // ========================================
-// CRUD - LISTAR USUÁRIOS (GET) aplicado leis de calistenia de objetos
+// CARREGAR USUÁRIOS
 // ========================================
 
 async function loadUsers() {
@@ -158,7 +149,6 @@ async function loadUsers() {
     const data = await response.json();
     hideSection('loading');
 
-    // Fail Fast: interrompe rapidamente em caso de erro
     if (!response.ok) {
         if (response.status === 401) {
             logout();
@@ -178,18 +168,19 @@ async function loadUsers() {
     displayUsers(users);
 }
 
-/* Funções auxiliares (melhoram legibilidade e aderem à calistenia) */
+// ========================================
+// FUNÇÕES AUXILIARES
+// ========================================
+
 function showSection(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = 'block';
+    if (el) el.style.display = DISPLAY_STYLES.BLOCK; // ✅ CORRIGIDO
 }
 
-/*Função auxiliar da função loadUsers*/
 function hideSection(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
+    if (el) el.style.display = DISPLAY_STYLES.NONE; // ✅ CORRIGIDO
 }
-
 
 function displayUsers(users) {
     const tbody = document.getElementById('users-list');
@@ -210,11 +201,11 @@ function displayUsers(users) {
         tbody.appendChild(tr);
     }
 
-    document.getElementById('users-table').style.display = 'table';
+    document.getElementById('users-table').style.display = DISPLAY_STYLES.TABLE; // ✅ CORRIGIDO
 }
 
 // ========================================
-// CRUD - CRIAR USUÁRIO (POST)
+// CRUD - CRIAR USUÁRIO
 // ========================================
 
 async function createUser(data) {
@@ -246,7 +237,7 @@ async function createUser(data) {
 }
 
 // ========================================
-// CRUD - BUSCAR USUÁRIO POR ID (GET)
+// CRUD - BUSCAR USUÁRIO POR ID
 // ========================================
 
 async function editUser(id) {
@@ -273,7 +264,7 @@ async function editUser(id) {
 }
 
 // ========================================
-// CRUD - ATUALIZAR USUÁRIO (PATCH)
+// CRUD - ATUALIZAR USUÁRIO
 // ========================================
 
 async function updateUser(id, data) {
@@ -305,7 +296,7 @@ async function updateUser(id, data) {
 }
 
 // ========================================
-// CRUD - DELETAR USUÁRIO (DELETE)
+// CRUD - DELETAR USUÁRIO
 // ========================================
 
 async function deleteUser(id) {
@@ -352,7 +343,7 @@ function openModal(mode, user = null) {
     if (mode === 'create') {
         document.getElementById('modal-title').textContent = 'Novo Usuário';
         document.getElementById('submit-btn').textContent = 'Criar Usuário';
-        passwordField.style.display = 'block';
+        passwordField.style.display = DISPLAY_STYLES.BLOCK;
         document.getElementById('user-password-input').required = true;
     } else {
         document.getElementById('modal-title').textContent = 'Editar Usuário';
@@ -360,21 +351,13 @@ function openModal(mode, user = null) {
         document.getElementById('user-id').value = user.id;
         document.getElementById('user-name-input').value = user.name;
         document.getElementById('user-email-input').value = user.email;
-        passwordField.style.display = 'none';
+        passwordField.style.display = DISPLAY_STYLES.NONE;
         document.getElementById('user-password-input').required = false;
     }
 
-    modal.classList.add('active');
+    modal.classList.add('active'); // ✅ Usando classes
 }
 
 function closeModal() {
-    document.getElementById('user-modal').classList.remove('active');
-
+    document.getElementById('user-modal').classList.remove('active'); // ✅ Usando classes
 }
-
-
-
-
-
-
-
