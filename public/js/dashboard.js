@@ -129,44 +129,67 @@ function showMessage(text, type) {
 }
 
 // ========================================
-// CRUD - LISTAR USUÁRIOS (GET)
+// CRUD - LISTAR USUÁRIOS (GET) aplicado leis de calistenia de objetos
 // ========================================
 
 async function loadUsers() {
     const token = checkAuth();
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('users-table').style.display = 'none';
-    document.getElementById('empty-state').style.display = 'none';
+    if (!token) {
+        logout();
+        return;
+    }
 
+    showSection('loading');
+    hideSection('users-table');
+    hideSection('empty-state');
+
+    let response;
     try {
-        const response = await fetch(`${API_URL}/users`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+        response = await fetch(`${API_URL}/users`, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-
-        const data = await response.json();
-        document.getElementById('loading').style.display = 'none';
-
-        if (response.ok) {
-            if (data.data.length === 0) {
-                document.getElementById('empty-state').style.display = 'block';
-            } else {
-                displayUsers(data.data);
-            }
-        } else {
-            if (response.status === 401) {
-                logout();
-            } else {
-                showMessage(data.message || 'Erro ao carregar usuários', 'error');
-            }
-        }
     } catch (error) {
         console.error('Erro ao carregar usuários:', error);
-        document.getElementById('loading').style.display = 'none';
+        hideSection('loading');
         showMessage('Erro ao conectar com o servidor', 'error');
+        return;
     }
+
+    const data = await response.json();
+    hideSection('loading');
+
+    // Fail Fast: interrompe rapidamente em caso de erro
+    if (!response.ok) {
+        if (response.status === 401) {
+            logout();
+            return;
+        }
+        showMessage(data.message || 'Erro ao carregar usuários', 'error');
+        return;
+    }
+
+    const users = data.data || [];
+    if (users.length === 0) {
+        showSection('empty-state');
+        return;
+    }
+
+    showSection('users-table');
+    displayUsers(users);
 }
+
+/* Funções auxiliares (melhoram legibilidade e aderem à calistenia) */
+function showSection(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'block';
+}
+
+/*Função auxiliar da função loadUsers*/
+function hideSection(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+
 
 function displayUsers(users) {
     const tbody = document.getElementById('users-list');
@@ -348,6 +371,7 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
 
 
 
