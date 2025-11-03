@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = loginUrl;
+        globalThis.location.href = loginUrl;
         return null;  // Retorna null (compatível com string)
     }
     return token;     // Retorna string
@@ -43,7 +43,7 @@ function displayUserName() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = loginUrl;
+    globalThis.location.href = loginUrl;
 }
 
 // ========================================
@@ -348,5 +348,6 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
 
 
