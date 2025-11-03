@@ -136,13 +136,13 @@ if (USE_HTTPS) {
     });
 
     // Opcional: Redirecionar HTTP para HTTPS
-    const httpPort = 80;
-    http.createServer((req, res) => {
-      res.writeHead(301, { "Location": `https://localhost:${PORT}${req.url}` });
-      res.end();
-    }).listen(httpPort, () => {
-      console.log(`🔀 HTTP (${httpPort}) → HTTPS (${PORT})`);
-    });
+    //const httpPort = 80;
+    //http.createServer((req, res) => {
+    //  res.writeHead(301, { "Location": `https://localhost:${PORT}${req.url}` });
+    //  res.end();
+    //}).listen(httpPort, () => {
+    //  console.log(`🔀 HTTP (${httpPort}) → HTTPS (${PORT})`);
+    //});
 
   } catch (error) {
     console.error('❌ Erro ao carregar certificados SSL:', error.message);
@@ -171,3 +171,4 @@ process.on('unhandledRejection', (err) => {
   console.error('❌ Erro não tratado:', err);
   process.exit(1);
 });
+
