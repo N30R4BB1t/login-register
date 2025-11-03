@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkIfLoggedIn() {
     const token = localStorage.getItem('token');
     if (token) {
-        window.location.href = dashboardUrl;
+        globalThis.location.href = dashboardUrl;
     }
 }
 
@@ -45,7 +45,6 @@ function setupEventListeners() {
 // ========================================
 
 function handleTabClick(e) {
-    //const tab = e.target.getAttribute('data-tab'); //modo antigo depreciado
     const tab = e.target.dataset.tab; //modo moderno
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -102,7 +101,7 @@ async function handleLogin(e) {
             showMessage('Login realizado com sucesso! Redirecionando...', 'success');
             
             setTimeout(() => {
-                window.location.href = dashboardUrl;
+                globalThis.location.href = dashboardUrl;
             }, 1000);
         } else {
             showMessage(data.message || 'Erro ao fazer login', 'error');
@@ -147,7 +146,7 @@ async function handleRegister(e) {
             showMessage('Conta criada com sucesso! Redirecionando...', 'success');
             
             setTimeout(() => {
-                window.location.href = dashboardUrl;
+                globalThis.location.href = dashboardUrl;
             }, 1000);
         } else {
             showMessage(data.message || 'Erro ao criar conta', 'error');
@@ -178,4 +177,5 @@ function hideMessage() {
     message.style.display = 'none';
 
 }
+
 
