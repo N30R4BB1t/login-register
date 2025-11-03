@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost/api'; // ✅ Porta 443 implícita
+const API_URL = 'https://localhost/api';
 const loginUrl = '/login.html';
 let currentMode = 'create';
 
@@ -10,7 +10,14 @@ const DISPLAY_STYLES = {
     BLOCK: 'block',
     NONE: 'none',
     FLEX: 'flex',
-    TABLE: 'table'  // ✅ ADICIONADO
+    TABLE: 'table'
+};
+
+const HTTP_METHODS = {
+    GET: 'GET',
+    POST: 'POST',
+    PATCH: 'PATCH',
+    DELETE: 'DELETE'
 };
 
 // ========================================
@@ -112,10 +119,10 @@ function showMessage(text, type) {
     const message = document.getElementById('message');
     message.textContent = text;
     message.className = `message ${type}`;
-    message.style.display = DISPLAY_STYLES.BLOCK; // ✅ CORRIGIDO
+    message.style.display = DISPLAY_STYLES.BLOCK;
     
     setTimeout(() => {
-        message.style.display = DISPLAY_STYLES.NONE; // ✅ CORRIGIDO
+        message.style.display = DISPLAY_STYLES.NONE;
     }, 5000);
 }
 
@@ -174,12 +181,12 @@ async function loadUsers() {
 
 function showSection(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = DISPLAY_STYLES.BLOCK; // ✅ CORRIGIDO
+    if (el) el.style.display = DISPLAY_STYLES.BLOCK;
 }
 
 function hideSection(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = DISPLAY_STYLES.NONE; // ✅ CORRIGIDO
+    if (el) el.style.display = DISPLAY_STYLES.NONE;
 }
 
 function displayUsers(users) {
@@ -201,7 +208,54 @@ function displayUsers(users) {
         tbody.appendChild(tr);
     }
 
-    document.getElementById('users-table').style.display = DISPLAY_STYLES.TABLE; // ✅ CORRIGIDO
+    document.getElementById('users-table').style.display = DISPLAY_STYLES.TABLE;
+}
+
+// ========================================
+// FUNÇÕES AUXILIARES DE API
+// ========================================
+
+async function makeAuthRequest(endpoint, options = {}) {
+    const token = checkAuth();
+    
+    const defaultHeaders = {
+        'Authorization': `Bearer ${token}`
+    };
+    
+    if (options.body) {
+        defaultHeaders['Content-Type'] = 'application/json';
+    }
+    
+    const config = {
+        ...options,
+        headers: {
+            ...defaultHeaders,
+            ...options.headers
+        }
+    };
+    
+    if (options.body && typeof options.body === 'object') {
+        config.body = JSON.stringify(options.body);
+    }
+    
+    return fetch(`${API_URL}${endpoint}`, config);
+}
+
+async function handleApiResponse(response, successMessage, errorPrefix) {
+    const result = await response.json();
+    
+    if (response.ok) {
+        showMessage(successMessage, 'success');
+        return { success: true, data: result.data };
+    }
+    
+    showMessage(result.message || `Erro ao ${errorPrefix}`, 'error');
+    return { success: false };
+}
+
+async function handleApiError(error, errorPrefix) {
+    console.error(`Erro ao ${errorPrefix}:`, error);
+    showMessage('Erro ao conectar com o servidor', 'error');
 }
 
 // ========================================
@@ -209,30 +263,24 @@ function displayUsers(users) {
 // ========================================
 
 async function createUser(data) {
-    const token = checkAuth();
-
     try {
-        const response = await fetch(`${API_URL}/auth/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(data)
+        const response = await makeAuthRequest('/auth/register', {
+            method: HTTP_METHODS.POST,
+            body: data
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            showMessage('Usuário criado com sucesso!', 'success');
+        
+        const result = await handleApiResponse(
+            response,
+            'Usuário criado com sucesso!',
+            'criar usuário'
+        );
+        
+        if (result.success) {
             closeModal();
             loadUsers();
-        } else {
-            showMessage(result.message || 'Erro ao criar usuário', 'error');
         }
     } catch (error) {
-        console.error('Erro ao criar usuário:', error);
-        showMessage('Erro ao conectar com o servidor', 'error');
+        handleApiError(error, 'criar usuário');
     }
 }
 
@@ -241,25 +289,20 @@ async function createUser(data) {
 // ========================================
 
 async function editUser(id) {
-    const token = checkAuth();
-
     try {
-        const response = await fetch(`${API_URL}/users/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
+        const response = await makeAuthRequest(`/users/${id}`);
+        
+        const result = await handleApiResponse(
+            response,
+            '', // Sem mensagem de sucesso
+            'buscar usuário'
+        );
+        
+        if (result.success) {
             openModal('edit', result.data);
-        } else {
-            showMessage(result.message || 'Erro ao buscar usuário', 'error');
         }
     } catch (error) {
-        console.error('Erro ao buscar usuário:', error);
-        showMessage('Erro ao conectar com o servidor', 'error');
+        handleApiError(error, 'buscar usuário');
     }
 }
 
@@ -268,30 +311,24 @@ async function editUser(id) {
 // ========================================
 
 async function updateUser(id, data) {
-    const token = checkAuth();
-
     try {
-        const response = await fetch(`${API_URL}/users/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(data)
+        const response = await makeAuthRequest(`/users/${id}`, {
+            method: HTTP_METHODS.PATCH,
+            body: data
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            showMessage('Usuário atualizado com sucesso!', 'success');
+        
+        const result = await handleApiResponse(
+            response,
+            'Usuário atualizado com sucesso!',
+            'atualizar usuário'
+        );
+        
+        if (result.success) {
             closeModal();
             loadUsers();
-        } else {
-            showMessage(result.message || 'Erro ao atualizar usuário', 'error');
         }
     } catch (error) {
-        console.error('Erro ao atualizar usuário:', error);
-        showMessage('Erro ao conectar com o servidor', 'error');
+        handleApiError(error, 'atualizar usuário');
     }
 }
 
@@ -304,27 +341,22 @@ async function deleteUser(id) {
         return;
     }
 
-    const token = checkAuth();
-
     try {
-        const response = await fetch(`${API_URL}/users/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+        const response = await makeAuthRequest(`/users/${id}`, {
+            method: HTTP_METHODS.DELETE
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            showMessage('Usuário deletado com sucesso!', 'success');
+        
+        const result = await handleApiResponse(
+            response,
+            'Usuário deletado com sucesso!',
+            'deletar usuário'
+        );
+        
+        if (result.success) {
             loadUsers();
-        } else {
-            showMessage(result.message || 'Erro ao deletar usuário', 'error');
         }
     } catch (error) {
-        console.error('Erro ao deletar usuário:', error);
-        showMessage('Erro ao conectar com o servidor', 'error');
+        handleApiError(error, 'deletar usuário');
     }
 }
 
@@ -355,9 +387,9 @@ function openModal(mode, user = null) {
         document.getElementById('user-password-input').required = false;
     }
 
-    modal.classList.add('active'); // ✅ Usando classes
+    modal.classList.add('active');
 }
 
 function closeModal() {
-    document.getElementById('user-modal').classList.remove('active'); // ✅ Usando classes
+    document.getElementById('user-modal').classList.remove('active');
 }
