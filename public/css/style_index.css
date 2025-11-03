@@ -11,7 +11,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #333;
+            color: white;
         }
 
         .container {
@@ -40,7 +40,7 @@
             display: inline-block;
             padding: 1rem 2rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: #333;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
@@ -81,4 +81,5 @@
             left: 0;
             color: #667eea;
             font-weight: bold;
+
         }
