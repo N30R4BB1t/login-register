@@ -104,7 +104,7 @@ input:focus {
     width: 100%;
     padding: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;  /* ✅ JÁ ESTAVA CORRETO */
+    color: #333;  /* ✅ JÁ ESTAVA CORRETO */
     border: none;
     border-radius: 10px;
     font-size: 1rem;
@@ -157,3 +157,4 @@ input:focus {
 .back-link a:hover {
     text-decoration: underline;
 }
+
