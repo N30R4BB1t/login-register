@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
-const path = require('path');
+const path = require('node:path');
 
 //Carregar variáveis de ambiente (SEMPRE NO TOPO!)
 dotenv.config();
@@ -131,3 +131,4 @@ process.on('unhandleRejection', (err) => {
     console.error('❌ Erro não tartado: ', err);
     process.exit(1);
 });
+
