@@ -31,9 +31,9 @@ function checkIfLoggedIn() {
 function setupEventListeners() {
     // Tabs (Login/Registro)
     const tabButtons = document.querySelectorAll('.tab-btn');
-    tabButtons.forEach(btn => {
+    for (const btn of tabButtons) {
         btn.addEventListener('click', handleTabClick);
-    });
+    }
 
     // Formulários
     document.getElementById('form-login').addEventListener('submit', handleLogin);
@@ -51,7 +51,9 @@ function handleTabClick(e) {
     const tabButtons = document.querySelectorAll('.tab-btn');
 
     // Remover active de todas as tabs
-    tabButtons.forEach(btn => btn.classList.remove('active'));
+    for (const btn of tabButtons) {
+        btn.classList.remove('active');
+    }
     
     // Adicionar active na tab clicada
     e.target.classList.add('active');
@@ -177,5 +179,6 @@ function hideMessage() {
     message.style.display = 'none';
 
 }
+
 
 
