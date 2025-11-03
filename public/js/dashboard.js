@@ -195,7 +195,7 @@ function displayUsers(users) {
     const tbody = document.getElementById('users-list');
     tbody.innerHTML = '';
 
-    users.forEach(user => {
+    for (const user of users) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${user.id}</td>
@@ -208,7 +208,7 @@ function displayUsers(users) {
             </td>
         `;
         tbody.appendChild(tr);
-    });
+    }
 
     document.getElementById('users-table').style.display = 'table';
 }
@@ -371,6 +371,7 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
 
 
 
