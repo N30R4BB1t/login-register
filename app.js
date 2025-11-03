@@ -2,10 +2,10 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
-const path = require('path');
-const https = require('https');  // ADICIONAR
-const http = require('http');    // ADICIONAR
-const fs = require('fs');        // ADICIONAR
+const path = require('node:path');
+const https = require('node:https');  // ADICIONAR
+const http = require('node:http');    // ADICIONAR
+const fs = require('node:fs');        // ADICIONAR
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -171,4 +171,5 @@ process.on('unhandledRejection', (err) => {
   console.error('❌ Erro não tratado:', err);
   process.exit(1);
 });
+
 
