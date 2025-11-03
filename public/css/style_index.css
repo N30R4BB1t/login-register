@@ -11,7 +11,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #667eea;  /* ✅ CORRIGIDO: Branco no gradiente escuro */
+    color: #ffffff;  /* ✅ CORRIGIDO: Branco no gradiente escuro */
 }
 
 .container {
@@ -40,7 +40,7 @@ p {
     display: inline-block;
     padding: 1rem 2rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #667eea;  /* ✅ JÁ ESTAVA CORRETO */
+    color: #595959;  /* ✅ JÁ ESTAVA CORRETO */
     text-decoration: none;
     border-radius: 50px;
     font-weight: 600;
@@ -83,4 +83,5 @@ p {
     color: #5a4fcf;  /* ✅ CORRIGIDO: Roxo mais escuro */
     font-weight: bold;
 }
+
 
