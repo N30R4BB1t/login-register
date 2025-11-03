@@ -1,6 +1,6 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Criar pasta ssl se não existir
 const sslDir = path.join(__dirname, 'ssl');
@@ -44,3 +44,4 @@ fs.writeFileSync(path.join(sslDir, 'cert.pem'), pems.cert);
 
 console.log('✅ Certificados gerados com sucesso!');
 console.log('📁 Localização: ssl/key.pem e ssl/cert.pem');
+
