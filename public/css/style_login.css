@@ -103,8 +103,8 @@ input:focus {
 .btn {
     width: 100%;
     padding: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;  /* ✅ JÁ ESTAVA CORRETO */
+    background: linear-gradient(135deg, #ffffff 0%, #764ba2 100%);
+    color: #595959;  /* ✅ JÁ ESTAVA CORRETO */
     border: none;
     border-radius: 10px;
     font-size: 1rem;
@@ -157,4 +157,5 @@ input:focus {
 .back-link a:hover {
     text-decoration: underline;
 }
+
 
