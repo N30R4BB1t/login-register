@@ -86,14 +86,14 @@ function handleTableClick(e) {
     // Botão Editar
     if (target.classList.contains('btn-warning')) {
         const row = target.closest('tr');
-        const id = parseInt(row.cells[0].textContent);
+        const id = Number.parseInt(row.cells[0].textContent);
         editUser(id);
     }
     
     // Botão Deletar
     if (target.classList.contains('btn-danger')) {
         const row = target.closest('tr');
-        const id = parseInt(row.cells[0].textContent);
+        const id = Number.parseInt(row.cells[0].textContent);
         deleteUser(id);
     }
 }
@@ -348,3 +348,4 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
