@@ -345,7 +345,7 @@ function openModal(mode, user = null) {
     currentMode = mode;
     const modal = document.getElementById('user-modal');
     const form = document.getElementById('user-form');
-    const passwordGroup = document.getElementById('password-group');
+    const passwordField = document.getElementById('password-group');
     
     form.reset();
 
@@ -371,6 +371,7 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
 
 
 
