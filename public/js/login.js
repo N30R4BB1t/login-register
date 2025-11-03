@@ -45,7 +45,8 @@ function setupEventListeners() {
 // ========================================
 
 function handleTabClick(e) {
-    const tab = e.target.getAttribute('data-tab');
+    //const tab = e.target.getAttribute('data-tab'); //modo antigo depreciado
+    const tab = e.target.dataset.tab; //modo moderno
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -175,4 +176,5 @@ function showMessage(text, type) {
 function hideMessage() {
     const message = document.getElementById('message');
     message.style.display = 'none';
+
 }
