@@ -68,7 +68,7 @@
         }
 
         .card h2 {
-            color: #667eea;
+            color: #4c5fd5;
             margin-bottom: 1.5rem;
         }
 
@@ -179,7 +179,7 @@
         }
 
         .modal-header h3 {
-            color: #667eea;
+            color: #4c5fd5;
         }
 
         .close {
@@ -213,7 +213,7 @@
 
         input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #4c5fd5;
         }
 
         .empty-state {
@@ -225,5 +225,6 @@
         .loading {
             text-align: center;
             padding: 2rem;
-            color: #667eea;
+            color: #4c5fd5;
+
         }
