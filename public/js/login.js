@@ -1,15 +1,12 @@
-const API_URL = 'https://localhost:443/api'; //para https
-const dashboardUrl = '/dashboard.html'
+const API_URL = 'https://localhost/api';
+const dashboardUrl = '/dashboard.html';
 
 // ========================================
 // INICIALIZAÇÃO
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificar se já está logado
     checkIfLoggedIn();
-    
-    // Configurar event listeners
     setupEventListeners();
 });
 
@@ -29,13 +26,11 @@ function checkIfLoggedIn() {
 // ========================================
 
 function setupEventListeners() {
-    // Tabs (Login/Registro)
     const tabButtons = document.querySelectorAll('.tab-btn');
     for (const btn of tabButtons) {
         btn.addEventListener('click', handleTabClick);
     }
-
-    // Formulários
+    
     document.getElementById('form-login').addEventListener('submit', handleLogin);
     document.getElementById('form-register').addEventListener('submit', handleRegister);
 }
@@ -45,20 +40,17 @@ function setupEventListeners() {
 // ========================================
 
 function handleTabClick(e) {
-    const tab = e.target.dataset.tab; //modo moderno
+    const tab = e.target.dataset.tab;
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const tabButtons = document.querySelectorAll('.tab-btn');
-
-    // Remover active de todas as tabs
+    
     for (const btn of tabButtons) {
         btn.classList.remove('active');
     }
     
-    // Adicionar active na tab clicada
     e.target.classList.add('active');
-
-    // Mostrar formulário correto
+    
     if (tab === 'login') {
         loginForm.classList.add('active');
         registerForm.classList.remove('active');
@@ -66,8 +58,35 @@ function handleTabClick(e) {
         registerForm.classList.add('active');
         loginForm.classList.remove('active');
     }
-
+    
     hideMessage();
+}
+
+// ========================================
+// FUNÇÕES AUXILIARES DE AUTENTICAÇÃO
+// ========================================
+
+function saveAuthData(token, user) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
+function redirectToDashboard(message) {
+    showMessage(message, 'success');
+    setTimeout(() => {
+        globalThis.location.href = dashboardUrl;
+    }, 1000);
+}
+
+function resetButton(btn, text) {
+    btn.disabled = false;
+    btn.textContent = text;
+}
+
+function handleAuthError(error, btn, originalText, logPrefix) {
+    console.error(`${logPrefix}:`, error);
+    showMessage('Erro ao conectar com o servidor', 'error');
+    resetButton(btn, originalText);
 }
 
 // ========================================
@@ -80,10 +99,11 @@ async function handleLogin(e) {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     const btn = document.getElementById('login-btn');
-
+    const originalText = 'Entrar';
+    
     btn.disabled = true;
     btn.textContent = 'Entrando...';
-
+    
     try {
         const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
@@ -92,29 +112,18 @@ async function handleLogin(e) {
             },
             body: JSON.stringify({ email, password })
         });
-
+        
         const data = await response.json();
-
+        
         if (response.ok) {
-            // Salvar token e usuário
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-
-            showMessage('Login realizado com sucesso! Redirecionando...', 'success');
-            
-            setTimeout(() => {
-                globalThis.location.href = dashboardUrl;
-            }, 1000);
+            saveAuthData(data.token, data.user);
+            redirectToDashboard('Login realizado com sucesso! Redirecionando...');
         } else {
             showMessage(data.message || 'Erro ao fazer login', 'error');
-            btn.disabled = false;
-            btn.textContent = 'Entrar';
+            resetButton(btn, originalText);
         }
     } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        showMessage('Erro ao conectar com o servidor', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Entrar';
+        handleAuthError(error, btn, originalText, 'Erro ao fazer login');
     }
 }
 
@@ -125,10 +134,11 @@ async function handleRegister(e) {
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
     const btn = document.getElementById('register-btn');
-
+    const originalText = 'Criar Conta';
+    
     btn.disabled = true;
     btn.textContent = 'Criando conta...';
-
+    
     try {
         const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
@@ -137,29 +147,18 @@ async function handleRegister(e) {
             },
             body: JSON.stringify({ name, email, password })
         });
-
+        
         const data = await response.json();
-
+        
         if (response.ok) {
-            // Salvar token e usuário
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-
-            showMessage('Conta criada com sucesso! Redirecionando...', 'success');
-            
-            setTimeout(() => {
-                globalThis.location.href = dashboardUrl;
-            }, 1000);
+            saveAuthData(data.token, data.user);
+            redirectToDashboard('Conta criada com sucesso! Redirecionando...');
         } else {
             showMessage(data.message || 'Erro ao criar conta', 'error');
-            btn.disabled = false;
-            btn.textContent = 'Criar Conta';
+            resetButton(btn, originalText);
         }
     } catch (error) {
-        console.error('Erro ao registrar:', error);
-        showMessage('Erro ao conectar com o servidor', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Criar Conta';
+        handleAuthError(error, btn, originalText, 'Erro ao registrar');
     }
 }
 
@@ -177,8 +176,4 @@ function showMessage(text, type) {
 function hideMessage() {
     const message = document.getElementById('message');
     message.style.display = 'none';
-
 }
-
-
-
