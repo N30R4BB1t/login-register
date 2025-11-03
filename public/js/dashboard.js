@@ -1,5 +1,5 @@
-//const API_URL = 'http://localhost:3000/api'; //para http
 const API_URL = 'https://localhost:443/api'; //para https
+const loginUrl = '/login.html';
 let currentMode = 'create';
 
 // ========================================
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = '/login.html';
+        window.location.href = loginUrl;
         return null;  // Retorna null (compatível com string)
     }
     return token;     // Retorna string
@@ -43,7 +43,7 @@ function displayUserName() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/login.html';
+    window.location.href = loginUrl;
 }
 
 // ========================================
@@ -348,4 +348,5 @@ function closeModal() {
     document.getElementById('user-modal').classList.remove('active');
 
 }
+
 
