@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkIfLoggedIn() {
     const token = localStorage.getItem('token');
     if (token) {
-        globalThis.location.href = dashboardUrl;
+        globalThis.window.location.href = dashboardUrl;
     }
 }
 
@@ -74,7 +74,7 @@ function saveAuthData(token, user) {
 function redirectToDashboard(message) {
     showMessage(message, 'success');
     setTimeout(() => {
-        globalThis.location.href = dashboardUrl;
+        globalThis.window.location.href = dashboardUrl;
     }, 1000);
 }
 
@@ -177,3 +177,4 @@ function hideMessage() {
     const message = document.getElementById('message');
     message.style.display = 'none';
 }
+
